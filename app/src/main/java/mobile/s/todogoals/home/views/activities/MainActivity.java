@@ -1,29 +1,27 @@
 package mobile.s.todogoals.home.views.activities;
-
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.widget.Spinner;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mobile.s.todogoals.R;
+import mobile.s.todogoals.application.BaseApplication;
+import mobile.s.todogoals.base.BaseActivity;
 import mobile.s.todogoals.home.component.DaggerHomeComponent;
 import mobile.s.todogoals.home.component.HomeComponent;
 import mobile.s.todogoals.home.modules.HomeModule;
+import mobile.s.todogoals.home.views.fragments.AddingNewToDoFragment;
+import mobile.s.todogoals.home.views.fragments.ToDoListFragment;
 import mobile.s.todogoals.home.views.interfaces.ToDoActivityView;
+import mobile.s.todogoals.utils.Messenger;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, ToDoActivityView {
     @BindView(R.id.toolbar)
      Toolbar toolbar;
@@ -35,8 +33,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        homeComponent = DaggerHomeComponent.builder().homeModule(new HomeModule(this))
-                .build();
+        homeComponent = DaggerHomeComponent.builder().homeModule(new HomeModule(this)).
+        applicationComponent(((BaseApplication) getApplicationContext()).getComponent()).build();
         homeComponent.injectHomeActivity(this);
         initialUI();
     }
@@ -105,12 +103,9 @@ public class MainActivity extends AppCompatActivity
     public void initialUI() {
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab.setOnClickListener(view -> {
+            AddingNewToDoFragment addingNewToDoFragment = AddingNewToDoFragment.getInstance();
+            replaceCurrentFragment(addingNewToDoFragment,true);
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -122,12 +117,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void initialFragment() {
+        ToDoListFragment addFamilyProfileFragment = new ToDoListFragment();
+        replaceCurrentFragment(addFamilyProfileFragment,true);
+    }
+
+    @Override
     public void showMessage(String message) {
+        Messenger.showErrorMsg(message,MainActivity.this);
 
     }
 
     @Override
     public void showErrMsg(String msg) {
+        Messenger.showErrorMsg(msg,MainActivity.this);
 
     }
 }

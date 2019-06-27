@@ -16,7 +16,7 @@ public interface ToDoDao {
     Flowable<List<ToDoModelDB>> getAllToDoList();
 
     @Query("DELETE FROM ToDoModelDB WHERE todoId= :id")
-    void deleteToDoById(Long id);
+    void deleteToDoById(int id);
 
     @Query("SELECT COUNT(todoId) FROM ToDoModelDB where todoDone=0")
     Flowable<Integer> getUnDoneToDoCount();

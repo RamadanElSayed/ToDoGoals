@@ -18,6 +18,9 @@ public class ToDoListFragment extends Fragment {
     public ToDoListFragment() {
         // Required empty public constructor
     }
+    public static ToDoListFragment getInstance() {
+        return new ToDoListFragment();
+    }
 
 
     @Override
