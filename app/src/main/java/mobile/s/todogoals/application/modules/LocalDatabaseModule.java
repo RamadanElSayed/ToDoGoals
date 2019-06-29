@@ -8,9 +8,6 @@ import mobile.s.todogoals.application.ApplicationScope;
 import mobile.s.todogoals.database.ToDoDao;
 import mobile.s.todogoals.database.ToDoDataBase;
 
-/**
- * Created by limo2 on 12/11/17.
- */
 @Module(includes = {ContextModule.class})
 public class LocalDatabaseModule {
 

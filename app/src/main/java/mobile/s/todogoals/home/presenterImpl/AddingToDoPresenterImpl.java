@@ -2,6 +2,8 @@ package mobile.s.todogoals.home.presenterImpl;
 import android.webkit.ValueCallback;
 import java.util.List;
 import javax.inject.Inject;
+
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -19,7 +21,7 @@ public class AddingToDoPresenterImpl implements AddingToDoPresenter {
     private MainActivity context;
     private CompositeDisposable compositeDisposable;
     private ToDoDao todoDatabaseQueries;
-    private AddingToDoFragmentInterface addingToDoFragmentInterface;
+
     @Inject
     public AddingToDoPresenterImpl(MainActivity context, ToDoDao toDoDao, CompositeDisposable compositeDisposable1) {
         this.context = context;
@@ -29,7 +31,7 @@ public class AddingToDoPresenterImpl implements AddingToDoPresenter {
 
     @Override
     public void setView(BaseView view) {
-        addingToDoFragmentInterface = (AddingToDoFragmentInterface) view;
+        AddingToDoFragmentInterface addingToDoFragmentInterface = (AddingToDoFragmentInterface) view;
     }
 
 
@@ -37,93 +39,33 @@ public class AddingToDoPresenterImpl implements AddingToDoPresenter {
     public void saveToDoItem(ToDoModelDB toDoModelDB, ValueCallback<Boolean> callback) {
 
 
-        Flowable<Boolean> observableSaveSession=Flowable.fromCallable(() -> {
-            todoDatabaseQueries.insertAzkarData(toDoModelDB);
-            return true;
-        });
+//        Flowable<Boolean> observableSaveSession=Flowable.fromCallable(() -> {
+//            todoDatabaseQueries.insertToDoData(toDoModelDB);
+//            return true;
+//        });
+//
+//        Disposable observerSaveSession=observableSaveSession.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
+//                subscribe(aBoolean -> {
+//                    if(aBoolean!=null)
+//                    {
+//                        callback.onReceiveValue(aBoolean);
+//                    }
+//
+//                });
+//
+//        compositeDisposable.add(observerSaveSession);
 
-        Disposable observerSaveSession=observableSaveSession.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
-                subscribe(aBoolean -> {
-                    if(aBoolean!=null)
-                    {
-                        callback.onReceiveValue(aBoolean);
-                    }
+        Completable completable = Completable.fromAction(() -> todoDatabaseQueries.insertToDoData(toDoModelDB));
 
+        Disposable disposable = completable.subscribeOn(io.reactivex.schedulers.Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
+                subscribe(() -> {
+                    callback.onReceiveValue(true);
                 });
 
-        compositeDisposable.add(observerSaveSession);
+        compositeDisposable.add(disposable);
 
     }
 
-    @Override
-    public void deleteToDoItem(int todoId, ValueCallback<Boolean> callback) {
-
-
-        Flowable<Boolean>observableDeleteSession=Flowable.fromCallable(() -> {
-            todoDatabaseQueries.deleteToDoById(todoId);
-            return true;
-        });
-
-
-        Disposable observerDeleteSession=observableDeleteSession.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
-                subscribe(aBoolean -> {
-                    if(aBoolean!=null)
-                    {
-                        callback.onReceiveValue(aBoolean);
-                    }
-
-                });
-
-        compositeDisposable.add(observerDeleteSession);
-    }
-
-    @Override
-    public void getToDoList(ValueCallback<List<ToDoModelDB>> listValueCallback) {
-
-        Flowable<List<ToDoModelDB>> observableGetSessions=todoDatabaseQueries.getAllToDoList();
-
-
-        Disposable observerGetSessions=observableGetSessions.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
-                subscribe(dbKeepingSessions -> {
-                    if(dbKeepingSessions!=null)
-                    {
-                        listValueCallback.onReceiveValue(dbKeepingSessions);
-                    }
-                });
-        compositeDisposable.add(observerGetSessions);
-    }
-
-    @Override
-    public void updateToDoState(int id, Boolean isDone, ValueCallback<Boolean> callback) {
-
-        Flowable<Boolean>observableUpdateSession=Flowable.fromCallable(() -> {
-            todoDatabaseQueries.updateDutyState(id,isDone);
-            return true;
-        });
-
-
-        Disposable observerUpdateSession=observableUpdateSession.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
-                subscribe(aBoolean -> {
-                    if(aBoolean!=null)
-                    {
-                        callback.onReceiveValue(aBoolean);
-                    }
-
-                });
-
-        compositeDisposable.add(observerUpdateSession);
-    }
-
-    @Override
-    public void getUnDoneToDoCount(ValueCallback<Integer> callback) {
-
-        Flowable<Integer> unDoneToDoCountObservable = todoDatabaseQueries.getUnDoneToDoCount();
-        Disposable observerUnDoneToDo = unDoneToDoCountObservable.
-                subscribeOn(io.reactivex.schedulers.Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
-                subscribe(callback::onReceiveValue);
-
-        compositeDisposable.add(observerUnDoneToDo);
-    }
 
 
     @Override

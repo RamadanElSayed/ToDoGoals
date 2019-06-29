@@ -32,7 +32,7 @@ public class NotificationUtils {
 
     public void showNotificationMessage(final String message, Intent intent) {
 
-       final int icon = R.drawable.ic_menu_share;
+       final int icon = R.drawable.studying;
        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         String id = mContext.getString(R.string.channel_id); // default_channel_id
         String title = mContext.getString(R.string.channel_name); // Default Channel
@@ -56,7 +56,7 @@ public class NotificationUtils {
             pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
             builder.setContentTitle(mContext.getString(R.string.app_name))                          // required
                     .setSmallIcon(icon)   // required
-                    .setContentText(mContext.getString(R.string.app_name)) // required
+                    .setContentText(mContext.getString(R.string.notify_desc)) // required
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .setSound(alarmSound)
@@ -72,7 +72,7 @@ public class NotificationUtils {
             pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
             builder.setContentTitle(mContext.getString(R.string.app_name))                          // required
                     .setSmallIcon(icon)   // required
-                    .setContentText(mContext.getString(R.string.app_name)) // required
+                    .setContentText(mContext.getString(R.string.notify_desc)) // required
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .setSound(alarmSound)
@@ -86,26 +86,5 @@ public class NotificationUtils {
         }
         Notification mNotification = builder.build();
         mNotifiManager.notify(DEFAULT_NOT_ID, mNotification);
-    }
-    // Playing notification sound
-    public void playNotificationSound() {
-        try {
-            Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                    + "://" + mContext.getPackageName() + "/raw/notification");
-            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Method checks if the app is in background or not
-     */
-
-    // Clears notification tray messages
-    public static void clearNotifications(Context context) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
     }
 }

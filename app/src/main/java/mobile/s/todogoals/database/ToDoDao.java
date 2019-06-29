@@ -10,10 +10,13 @@ import io.reactivex.Flowable;
 public interface ToDoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAzkarData(ToDoModelDB toDoModelDB);
+    void insertToDoData(ToDoModelDB toDoModelDB);
 
-    @Query("SELECT * FROM ToDoModelDB")
-    Flowable<List<ToDoModelDB>> getAllToDoList();
+    @Query("SELECT * FROM ToDoModelDB where todoDone=0")
+    Flowable<List<ToDoModelDB>> getComingAllToDoList();
+
+    @Query("SELECT * FROM ToDoModelDB where todoDone=1")
+    Flowable<List<ToDoModelDB>> getFinishedAllToDoList();
 
     @Query("DELETE FROM ToDoModelDB WHERE todoId= :id")
     void deleteToDoById(int id);

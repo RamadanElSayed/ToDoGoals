@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_duty_recycler"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+    android:background="@drawable/bg_duty_recycler"
+    android:backgroundTint="@color/Gray"
+    android:id="@+id/row_layout_todo"
+    android:layout_height="200dp">
+    <View
+        android:id="@+id/dividerId"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:id="@+id/start_time_id"
+        android:text="xsasandmdnnd"
+        app:layout_constraintStart_toEndOf="@id/dividerId"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="title"
+        android:id="@+id/title_todo"
+        app:layout_constraintStart_toEndOf="@id/dividerId"
+        app:layout_constraintTop_toBottomOf="@id/start_time_id"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="desc"
+        android:id="@+id/desc_todo"
+        app:layout_constraintStart_toEndOf="@id/dividerId"
+        app:layout_constraintTop_toBottomOf="@id/title_todo"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/end_time_id"
+        android:text="xsasandmdnnd"
+        app:layout_constraintStart_toEndOf="@id/dividerId"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+
+        />
+</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

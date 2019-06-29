@@ -1,6 +1,8 @@
 package mobile.s.todogoals.home.views.activities;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.toolbar)
      Toolbar toolbar;
     HomeComponent homeComponent;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class MainActivity extends BaseActivity
         homeComponent = DaggerHomeComponent.builder().homeModule(new HomeModule(this)).
         applicationComponent(((BaseApplication) getApplicationContext()).getComponent()).build();
         homeComponent.injectHomeActivity(this);
+        initialFragment();
+
         initialUI();
     }
 
@@ -55,7 +60,10 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
+        hideOption(R.id.action_settings);
+
         return true;
     }
 
@@ -104,8 +112,19 @@ public class MainActivity extends BaseActivity
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
+            //startActivity(AddingFragmentActivity.getLaunchIntent(MainActivity.this);
             AddingNewToDoFragment addingNewToDoFragment = AddingNewToDoFragment.getInstance();
-            replaceCurrentFragment(addingNewToDoFragment,true);
+            //replaceCurrentFragment(addingNewToDoFragment,true);
+
+            FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.container, addingNewToDoFragment);
+            fragmentTransaction.commit();
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
+
+
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -114,12 +133,38 @@ public class MainActivity extends BaseActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    isShow = true;
+                    showOption(R.id.action_settings);
+                } else if (isShow) {
+                    isShow = false;
+                    hideOption(R.id.action_settings);
+                }
+            }
+        });
     }
 
     @Override
     public void initialFragment() {
-        ToDoListFragment addFamilyProfileFragment = new ToDoListFragment();
-        replaceCurrentFragment(addFamilyProfileFragment,true);
+//        ToDoListFragment toDoListFragment = ToDoListFragment.getInstance();
+//        replaceCurrentFragment(toDoListFragment,true);
+
+        ToDoListFragment toDoListFragment = ToDoListFragment.getInstance();
+        FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, toDoListFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -132,5 +177,15 @@ public class MainActivity extends BaseActivity
     public void showErrMsg(String msg) {
         Messenger.showErrorMsg(msg,MainActivity.this);
 
+    }
+
+    private void hideOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(false);
+    }
+
+    private void showOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(true);
     }
 }

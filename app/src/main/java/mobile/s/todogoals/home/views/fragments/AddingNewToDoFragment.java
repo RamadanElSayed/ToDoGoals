@@ -32,13 +32,10 @@ public class AddingNewToDoFragment extends BaseFragment implements AddingToDoFra
 
     @BindView(R.id.duty_title_edit_txt)
     EditText todoTitle;
-
     @BindView(R.id.duty_desc_edit_txt)
     EditText todoDescription;
-
     @BindView(R.id.duty_date_strat_txt)
     ToDoTextView todoStartDate;
-
     @BindView(R.id.duty_date_end_txt)
     ToDoTextView todoEndDate;
     @Inject
@@ -152,9 +149,12 @@ public class AddingNewToDoFragment extends BaseFragment implements AddingToDoFra
 
     @Override
     public void navigateToHomeFragment() {
-        ToDoListFragment toDoListFragment = ToDoListFragment.getInstance();
-        ((MainActivity) Objects.requireNonNull(getActivity())).replaceCurrentFragment(toDoListFragment,true);
+        ((MainActivity) Objects.requireNonNull(getActivity())).initialFragment();
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        addingToDoPresenter.onStopObserver();
+    }
 }

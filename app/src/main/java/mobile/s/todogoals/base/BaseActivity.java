@@ -7,12 +7,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import mobile.s.todogoals.utils.AlarmUtil;
+
 public class BaseActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AlarmUtil(BaseActivity.this).setEarningAlarm(20);
+
     }
 
     public void  addFragment(Fragment fragment) {
@@ -50,4 +54,9 @@ public class BaseActivity extends AppCompatActivity {
         return getRootView().getId();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new AlarmUtil(BaseActivity.this).setEarningAlarm(20);
+    }
 }

@@ -3,16 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="mobile.s.todogoals">
 
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:name=".application.BaseApplication"
-        android:supportsRtl="true"
-        android:icon="@drawable/error_circle"
+        android:icon="@drawable/studying"
+        android:label="@string/app_name"
         android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon,android:supportsRtl"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:icon,android:supportsRtl">
+        <activity android:name=".home.views.activities.AddingFragmentActivity"></activity>
         <activity
             android:name=".home.views.activities.MainActivity"
             android:label="@string/app_name"
@@ -24,6 +29,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".base.BaseActivity" />
+
+        <receiver
+            android:name=".services.DeviceBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".services.TodayToDoReceiver" />
     </application>
 
 </manifest>
